@@ -1,13 +1,18 @@
 <template>
     <div class="notes__preview">
-        <input class="notes__title" type="text" placeholder="Enter a title...">
-        <textarea class="notes__body">I am the notes body...</textarea>
+        <input v-model="noteTitle" class="notes__title" type="text" placeholder="Enter a title...">
+        <textarea v-model="noteBody" class="notes__body" placeholder="Write stuff..."></textarea>
     </div>
 </template>
 
 <script>
-export default {    
-    
+export default {
+    data() {
+        return {
+            noteTitle: '',
+            noteBody: ''
+        }
+    }
 }
 </script>
 
