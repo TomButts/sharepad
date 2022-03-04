@@ -10,3 +10,12 @@ import './styles/app.css';
 
 // start the Stimulus application
 import './bootstrap';
+
+import Vue from 'vue';
+import Notepad from './components/Notepad.vue';
+import Notelist from './components/Notelist.vue';
+
+new Vue({
+    el: '#app',
+    components: {Notepad, Notelist}
+})
