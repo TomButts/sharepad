@@ -2,7 +2,12 @@
 
 {% block body %}
 <div class="notes" id="app">
-    <Notelist></Notelist>
-    <Notepad></Notepad>
+    <Notelist 
+      :notes="notes"
+      v-on:select-note="changeNote($event)"
+      v-on:new-note="newNote"
+    > 
+    </Notelist>
+    <Notepad :note="note"></Notepad>
 </div>
 {% endblock %}
