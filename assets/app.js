@@ -1,6 +1,7 @@
 import './styles/app.css';
 import './bootstrap';
 import Vue from 'vue';
+import axios from 'axios';
 import Notepad from './components/Notepad.vue';
 import Notelist from './components/Notelist.vue';
 
@@ -9,32 +10,8 @@ new Vue({
     components: {Notepad, Notelist},
     data() {
         return {
-            note: {
-                id: 1,
-                title: 'Title 1',
-                body: 'This is a character limited version of what is in the note',
-                date: '2022-03-03 12:00:00'
-            },
-            notes: [
-                {
-                    id: 1,
-                    title: 'Title 1',
-                    body: 'This is a character limited version of what is in the note',
-                    date: '2022-03-03 12:00:00'
-                },
-                {
-                    id: 2,
-                    title: 'Title 2',
-                    body: 'This is not a drill',
-                    date: '2022-03-03 12:00:00'
-                },
-                {
-                    id: 3,
-                    title: 'Title 3',
-                    body: 'This could be a drill?!',
-                    date: '2022-03-03 12:00:00'
-                }
-            ]
+            note: {},
+            notes: []
         }
     },
     methods: {
@@ -73,5 +50,11 @@ new Vue({
         saveNote: function (note) {
             // todo
         }
+    },
+    mounted() {
+        axios.get('/notes').then((response) => {
+            this.notes = response.data.notes
+            this.note = response.data.notes[0]
+        });
     }
 })

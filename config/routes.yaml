@@ -1,3 +1,7 @@
 index:
    path: /
    controller: App\Controller\NoteController::index
+
+notes:
+   path: /notes
+   controller: App\Controller\NoteController::notes
