@@ -8,11 +8,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\NoteRepository;
 
+
 class NoteController extends AbstractController
 {
-    /**
-     * @Route("/note", name="app_note")
-     */
     public function index(): Response
     {
         return $this->render('Notepad/index.html.twig');
