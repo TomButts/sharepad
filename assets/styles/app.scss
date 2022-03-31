@@ -56,10 +56,19 @@ body {
 
 .notes__small-title {
     font-size: 1.2em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .notes__small-body {
     padding: 0 10px;
+}
+
+.notes__small-body, .notes__small-title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .notes__small-updated {

@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\NoteRepository;
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
-use DateTime;
 use DateTimeImmutable;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 /**
  * @ORM\Entity(repositoryClass=NoteRepository::class)
@@ -14,6 +15,7 @@ use DateTimeImmutable;
 class Note
 {
     /**
+     * @Groups("note")
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -21,17 +23,20 @@ class Note
     private $id;
 
     /**
+     * @Groups("user_data")
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="notes")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
     /**
+     * @Groups("note")
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $title;
 
     /**
+     * @Groups("note")
      * @ORM\Column(type="text", nullable=true)
      */
     private $body;
@@ -52,10 +57,10 @@ class Note
     */
     public function updatedTimestamps(): void
     {
-        $this->setUpdatedAt(new DateTime());
+        $this->setUpdatedAt(new DateTimeImmutable());
 
         if (null === $this->getCreatedAt()) {
-            $this->setCreatedAt(new DateTime());
+            $this->setCreatedAt(new DateTimeImmutable());
         }
     }
 
@@ -105,6 +110,19 @@ class Note
         return $this->created_at;
     }
 
+    /**
+     * @SerializedName("created_at")
+     * @Groups("note")
+     */
+    public function getCreatedAtFormatted(): ?string
+    {
+        if (null !== $this->created_at) {
+            return $this->created_at->format('d-m-Y H:i:s');
+        }
+
+        return null;
+    }
+
     public function setCreatedAt(DateTimeImmutable $created_at): self
     {
         $this->created_at = $created_at;
@@ -115,6 +133,19 @@ class Note
     public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updated_at;
+    }
+
+    /**
+     * @SerializedName("updated_at")
+     * @Groups("note")
+     */
+    public function getUpdatedAtFormatted(): ?string
+    {
+        if (null !== $this->updated_at) {
+            return $this->updated_at->format('d-m-Y H:i:s');
+        }
+
+        return null;
     }
 
     public function setUpdatedAt(DateTimeImmutable $updated_at): self

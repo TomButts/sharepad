@@ -22,6 +22,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "axios": "^0.26.1"
+        "axios": "^0.26.1",
+        "debounce": "^1.2.1"
     }
 }
