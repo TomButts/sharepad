@@ -100,6 +100,9 @@
     "laminas/laminas-code": {
         "version": "4.5.1"
     },
+    "monolog/monolog": {
+        "version": "1.27.0"
+    },
     "nikic/php-parser": {
         "version": "v4.13.2"
     },
@@ -223,6 +226,24 @@
     },
     "symfony/mime": {
         "version": "v4.4.37"
+    },
+    "symfony/monolog-bridge": {
+        "version": "v4.4.37"
+    },
+    "symfony/monolog-bundle": {
+        "version": "3.7",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "2120e71a370db3a494b8afcc42d7cfb2cff6f910"
+        },
+        "files": [
+            "config/packages/dev/monolog.yaml",
+            "config/packages/prod/deprecations.yaml",
+            "config/packages/prod/monolog.yaml",
+            "config/packages/test/monolog.yaml"
+        ]
     },
     "symfony/polyfill-intl-idn": {
         "version": "v1.25.0"
