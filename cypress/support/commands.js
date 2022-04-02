@@ -1,3 +1,5 @@
+import user from "../fixtures/user.json";
+
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -23,3 +25,17 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("loginByCSRF", (csrfToken) => {
+  cy.request({
+    method: "POST",
+    url: "/login",
+    failOnStatusCode: false,
+    form: true,
+    body: {
+      email: user.email,
+      password: user.password,
+      _csrf_token: csrfToken,
+    },
+  });
+});
