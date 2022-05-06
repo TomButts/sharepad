@@ -9,9 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Note;
 use App\Repository\NoteRepository;
 use DateTimeImmutable;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Twig\Node\BodyNode;
 
 class NoteController extends AbstractController
 {
@@ -52,24 +50,13 @@ class NoteController extends AbstractController
         }
 
         $id = filter_var($data->id, FILTER_VALIDATE_INT);
-        $local = filter_var($data->local, FILTER_VALIDATE_BOOL);
         $body = filter_var($data->body, FILTER_UNSAFE_RAW);
 
-        if (true === $local) {
-            // todo CRUD 'maker' class
+        if (0 === $id) {
             $note = new Note();
-
-            $note->setBody($body);
-            $note->setUpdatedAt(new DateTimeImmutable());
-            $note->setUser($this->getUser());
-
-            $em->persist($note);
-            $em->flush();
-
-            return $this->json(['note' => $note], Response::HTTP_OK, [], ['groups' => 'note']);
+        } else {
+            $note = $noteRepository->find($id);
         }
-
-        $note = $noteRepository->find($id);
 
         if (null === $note) {
             return $this->json([], Response::HTTP_NOT_FOUND);
@@ -77,10 +64,11 @@ class NoteController extends AbstractController
 
         $note->setBody($body);
         $note->setUpdatedAt(new DateTimeImmutable());
+        $note->setUser($this->getUser());
 
         $em->persist($note);
         $em->flush();
-        
+
         return $this->json(['note' => $note], Response::HTTP_OK, [], ['groups' => 'note']);
     }
 }

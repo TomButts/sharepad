@@ -5,19 +5,22 @@ import axios from "axios";
 import Notepad from "./components/Notepad.vue";
 import Notelist from "./components/Notelist.vue";
 import { debounce } from "debounce";
+import moment from "moment";
+
+let blankNote = {
+  id: 0,
+  body: "",
+  created_at: moment().format('DD-MM-YY HH:mm:ss'),
+  updated_at: moment().format('DD-MM-YY HH:mm:ss'),
+};
 
 new Vue({
   el: "#app",
   components: { Notepad, Notelist },
   data() {
     return {
-      note: {
-        id: 0,
-        body: "",
-        created_at: Date.now(),
-        updated_at: Date.now(),
-      },
-      notes: [],
+      note: blankNote,
+      notes: [blankNote],
     };
   },
   methods: {
@@ -56,12 +59,11 @@ new Vue({
           .post("/note/save", {
             id: this.note.id,
             body: this.note.body,
-            local: 0 === this.note.id,
           })
           .then((response) => {
-            note = response.data.note;
-
-            this.popNewNote(note);
+            if (0 === this.note.id && 0 !== response.data.note) {
+              this.note.id = response.data.note.id;
+            }
           });
       }, 500),
       deep: true,

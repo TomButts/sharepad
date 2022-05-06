@@ -12,16 +12,14 @@ describe("Notepad tests", () => {
         });
     });
   
-    it("has blank list state", () => {
+    it("has empty notes list item", () => {
       // have notes return empty
       cy.intercept("GET", "/notes", { notes: [] });
 
-      cy.visit("/")
-        .contains("Add Note")
-        .find(".notes__list")
-        .should(($el) => {
-          expect($el.text().trim()).equal("");
-        });
+      cy.visit("/").contains("Add Note")
+
+      cy.contains('New Note')
+      cy.contains('No additional text')
     });
   });
   

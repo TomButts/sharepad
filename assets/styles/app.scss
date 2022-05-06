@@ -45,8 +45,7 @@ body {
 
 .notes__list-item--selected {
     background: #eeeeee;
-    border-radius: 7px;
-    font-weight: bold;
+    border-radius: 5px;
 }
 
 .notes__small-title,
@@ -55,7 +54,8 @@ body {
 }
 
 .notes__small-title {
-    font-size: 1.2em;
+    font-size: 1em;
+    font-weight: bold;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -84,16 +84,10 @@ body {
     flex-grow: 1;
 }
 
-.notes__title,
 .notes__body {
     border: none;
     outline: none;
     width: 100%;
-}
-
-.notes__title {
-    font-size: 3em;
-    font-weight: bold;
 }
 
 .notes__body {

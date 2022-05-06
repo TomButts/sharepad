@@ -20,4 +20,11 @@ describe("Notepad tests", () => {
       .get(".notes__body")
       .should("have.value", "");
   });
+
+  it("let user write notes", () => {
+    cy.intercept("GET", "/notes", { notes: [] });
+    cy.visit("/").get(".notes__body").type("Hello, Friend");
+
+    cy.get(".notes__body").contains("Hello, Friend");
+  });
 });

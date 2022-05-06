@@ -49,7 +49,11 @@
 
         let lines = body.split("\n").filter((line) => "" !== line);
 
-        return lines[1].substring(0, 100);
+        if (undefined !== lines[1]) {
+          return lines[1].substring(0, 100);
+        }
+
+        return "No additional text";
       },
     },
   };
