@@ -1,3 +1,9 @@
+<style scoped>
+  .share-icon {
+    float: right;
+  }
+</style>
+
 <template>
   <div class="notes__sidebar">
     <button class="notes__add" type="button" v-on:click="newNote">
@@ -12,7 +18,10 @@
           :class="{ 'notes__list-item--selected': index === 0 }"
           v-on:click="selectNote(note.id)"
         >
-          <div class="notes__small-title">{{ title(note.body) }}</div>
+          <div class="notes__small-title">{{ title(note.body) }}
+            <!-- todo: icons -->
+            <span class="share-icon" v-on:click="handleShare(note.id)">+++</span>
+          </div>
           <div class="notes__small-body">{{ preview(note.body) }}</div>
           <div class="notes__small-updated">{{ note.updated_at }}</div>
         </div>
@@ -27,6 +36,9 @@
     methods: {
       selectNote: function (id) {
         this.$emit("select-note", id);
+      },
+      handleShare: function (id) {
+        console.log('hey shared')
       },
       newNote: function () {
         this.$emit("new-note");

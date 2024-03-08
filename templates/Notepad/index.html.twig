@@ -6,9 +6,10 @@
       :notes="notes"
       v-on:select-note="changeNote($event)"
       v-on:new-note="newNote"
-    > 
+    >
     </Notelist>
     <Notepad :note="note"></Notepad>
+    <Share :visible="1" :participants="participants"></Share>
 </div>
 {% endblock %}
 

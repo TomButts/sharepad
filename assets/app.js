@@ -4,6 +4,7 @@ import Vue from "vue";
 import axios from "axios";
 import Notepad from "./components/Notepad.vue";
 import Notelist from "./components/Notelist.vue";
+import Share from "./components/Share.vue";
 import { debounce } from "debounce";
 import moment from "moment";
 
@@ -14,13 +15,26 @@ let blankNote = {
   updated_at: moment().format('DD-MM-YY HH:mm:ss'),
 };
 
+// dev stub
+const participants = [
+  {
+    id: 1,
+    email: 'buddy.guy@friend.com'
+  },
+  {
+    id: 2,
+    email: 'not.your@buddy.com'
+  }
+];
+
 new Vue({
   el: "#app",
-  components: { Notepad, Notelist },
+  components: { Notepad, Notelist, Share },
   data() {
     return {
       note: blankNote,
       notes: [blankNote],
+      participants: participants
     };
   },
   methods: {
@@ -72,7 +86,12 @@ new Vue({
   mounted() {
     axios.get("/notes").then((response) => {
       if (0 !== response.data.notes.length) {
-        this.notes = response.data.notes;
+        this.notes = response.data.notes.map((note) => {
+          note.participants = participants
+          
+          return note
+        });
+        
         this.note = response.data.notes[0];
       }
     });

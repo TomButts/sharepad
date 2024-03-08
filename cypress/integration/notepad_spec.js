@@ -1,6 +1,7 @@
 describe("Notepad tests", () => {
   before(() => {
-    cy.request("/login")
+    cy.request("/logout")
+      .request("/login")
       .its("body")
       .then((body) => {
         const $html = Cypress.$(body);
@@ -19,12 +20,16 @@ describe("Notepad tests", () => {
       .contains("Add Note")
       .get(".notes__body")
       .should("have.value", "");
-  });
 
-  it("let user write notes", () => {
-    cy.intercept("GET", "/notes", { notes: [] });
+
     cy.visit("/").get(".notes__body").type("Hello, Friend");
-
-    cy.get(".notes__body").contains("Hello, Friend");
+    cy.get(".notes__body").should('have.value', "Hello, Friend");
   });
+
+  // todo before all not working for second test?
+  // it("let user write notes", () => {
+  //   cy.intercept("GET", "/notes", { notes: [] });
+  //   cy.visit("/").get(".notes__body").type("Hello, Friend");
+  //   cy.get(".notes__body").contains("Hello, Friend");
+  // });
 });
