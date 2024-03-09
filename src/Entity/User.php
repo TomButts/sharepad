@@ -41,13 +41,19 @@ class User implements UserInterface
 
     /**
      * @Groups("note_data")
-     * @ORM\OneToMany(targetEntity=Note::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=Note::class, mappedBy="owner")
      */
     private $notes;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Note::class, mappedBy="participants")
+     */
+    private $sharedNotes;
 
     public function __construct()
     {
         $this->notes = new ArrayCollection();
+        $this->sharedNotes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -143,7 +149,7 @@ class User implements UserInterface
     {
         if (!$this->notes->contains($note)) {
             $this->notes[] = $note;
-            $note->setUser($this);
+            $note->setOwner($this);
         }
 
         return $this;
@@ -153,9 +159,36 @@ class User implements UserInterface
     {
         if ($this->notes->removeElement($note)) {
             // set the owning side to null (unless already changed)
-            if ($note->getUser() === $this) {
-                $note->setUser(null);
+            if ($note->getOwner() === $this) {
+                $note->setOwner(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Note>
+     */
+    public function getSharedNotes(): Collection
+    {
+        return $this->sharedNotes;
+    }
+
+    public function addSharedNote(Note $sharedNote): self
+    {
+        if (!$this->sharedNotes->contains($sharedNote)) {
+            $this->sharedNotes[] = $sharedNote;
+            $sharedNote->addParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSharedNote(Note $sharedNote): self
+    {
+        if ($this->sharedNotes->removeElement($sharedNote)) {
+            $sharedNote->removeParticipant($this);
         }
 
         return $this;

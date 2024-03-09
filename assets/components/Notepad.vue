@@ -3,7 +3,7 @@
     <textarea
       v-model="note.body"
       class="notes__body"
-      placeholder="Write stuff..."
+      placeholder="Write a beautiful note here..."
     ></textarea>
   </div>
 </template>

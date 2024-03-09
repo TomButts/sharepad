@@ -15,14 +15,14 @@ let blankNote = {
   updated_at: moment().format('DD-MM-YY HH:mm:ss'),
 };
 
-// dev stub
+// dev stub: remove in next phase: adding real verified secure participants
 const participants = [
   {
-    id: 1,
+    id: 101,
     email: 'buddy.guy@friend.com'
   },
   {
-    id: 2,
+    id: 202,
     email: 'not.your@buddy.com'
   }
 ];
@@ -56,10 +56,16 @@ new Vue({
       this.note = note;
     },
     newNote: function () {
-      // todo: save previous active note
-      axios.post("/note/add").then((response) => {
-        this.popNewNote(response.data.note);
-      });
+      if (this.note.body.length > 0) {
+        axios
+          .post("/note/save", {
+            id: this.note.id,
+            body: this.note.body,
+          })
+          .then((response) => {
+            this.popNewNote(blankNote);
+          });
+      }
     },
   },
   watch: {
@@ -86,13 +92,11 @@ new Vue({
   mounted() {
     axios.get("/notes").then((response) => {
       if (0 !== response.data.notes.length) {
-        this.notes = response.data.notes.map((note) => {
-          note.participants = participants
-          
-          return note
-        });
+        this.notes = response.data.notes;
         
-        this.note = response.data.notes[0];
+        if (response.data.notes && response.data.notes.length > 0) {
+          this.note = response.data.notes[0];
+        }
       }
     });
   },

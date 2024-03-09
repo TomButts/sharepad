@@ -12,11 +12,7 @@ index:
 
 notes:
    path: /notes
-   controller: App\Controller\NoteController::notes
-
-notes_add:
-   path: /note/add
-   controller: App\Controller\NoteController::addNote
+   controller: App\Controller\NoteController::notes      
 
 notes_save:
    path: /note/save
