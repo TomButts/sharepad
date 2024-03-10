@@ -14,5 +14,9 @@
 {% endblock %}
 
 {% block javascripts %}
+  <script type="application/json" id="mercure-url">
+    {{ mercure('/note/{id}')|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
+  </script>
+  
   {{ encore_entry_script_tags('app') }}
 {% endblock %}

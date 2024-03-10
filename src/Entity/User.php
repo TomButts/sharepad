@@ -193,4 +193,27 @@ class User implements UserInterface
 
         return $this;
     }
+
+    public function getAllEditableNotes(): array
+    {
+        $allNotes = array_merge(
+            $this->getNotes()->toArray(),
+            $this->getSharedNotes()->toArray()
+        );
+
+        return $allNotes;
+    }
+
+    public function hasAccessToNote(int $noteId): bool
+    {
+        $accessibleNotes = $this->getAllEditableNotes();
+
+        foreach ($accessibleNotes as $note) {
+            if ($note->getId() === $noteId) {
+                return true;
+            }        
+        }
+
+        return false;
+    }
 }

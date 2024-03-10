@@ -10,6 +10,10 @@ use App\Entity\Note;
 use App\Repository\NoteRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Mercure\HubInterface;
+use Symfony\Component\Mercure\Update;
+
+use function PHPSTORM_META\map;
 
 class NoteController extends AbstractController
 {
@@ -20,9 +24,12 @@ class NoteController extends AbstractController
 
     public function notes(NoteRepository $noteRepository): JsonResponse
     {
-        $notes = $noteRepository->findBy(['owner' => $this->getUser()], ['updated_at' => 'DESC']);
-
-        return $this->json(['notes' => $notes], Response::HTTP_OK, [], ['groups' => 'note']);
+        return $this->json(
+            ['notes' => $this->getUser()->getAllEditableNotes()],
+            Response::HTTP_OK,
+            [],
+            ['groups' => 'note']
+        );
     }
 
     /**
@@ -34,8 +41,12 @@ class NoteController extends AbstractController
      *
      * @return JsonResponse
      */
-    public function saveNote(Request $request, NoteRepository $noteRepository, EntityManagerInterface $em): JsonResponse
-    {
+    public function saveNote(
+        Request $request,
+        NoteRepository $noteRepository,
+        EntityManagerInterface $em,
+        HubInterface $hub
+    ): JsonResponse {
         $data = $request->getContent();
 
         if (!empty($data)) {
@@ -49,12 +60,15 @@ class NoteController extends AbstractController
             $note = new Note();
             $note->setOwner($this->getUser());
         } else {
-            $note = $noteRepository->findOneBy(['id' => $noteId, 'owner' => $this->getUser()]);
+            if (!$this->getUser()->hasAccessToNote($noteId)) {
+                return $this->json(['message' => 'Could not update resource.'], Response::HTTP_FORBIDDEN);
+            }
+
+            $note = $noteRepository->find(['id' => $noteId]);
         }
 
         if (null === $note) {
-            // todo: set up monolog
-
+            // todo: logging package
             return $this->json([], Response::HTTP_NOT_FOUND);
         }
 
@@ -63,6 +77,13 @@ class NoteController extends AbstractController
 
         $em->persist($note);
         $em->flush();
+
+        $updatedNote = new Update(sprintf('/note/%d', $note->getId()), json_encode([
+            'id' => $note->getId(),
+            'body' => $note->getBody()
+        ]));
+
+        $hub->publish($updatedNote);
 
         return $this->json(['note' => $note], Response::HTTP_OK, [], ['groups' => 'note']);
     }

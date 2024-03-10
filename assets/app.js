@@ -1,6 +1,7 @@
 import "./styles/app.scss";
 import "./bootstrap";
 import Vue from "vue";
+import { nextTick } from "vue";
 import axios from "axios";
 import Notepad from "./components/Notepad.vue";
 import Notelist from "./components/Notelist.vue";
@@ -71,7 +72,7 @@ new Vue({
   watch: {
     note: {
       handler: debounce(function (e) {
-        if ("" === this.note.body) {
+        if (this.note.isReceivingUpdate) {
           return;
         }
 
@@ -90,6 +91,30 @@ new Vue({
     },
   },
   mounted() {
+    const eventSource = new EventSource(JSON.parse(document.getElementById("mercure-url").textContent));
+    
+    eventSource.onmessage = event => {
+      const eventData = JSON.parse(event.data)
+
+      if (eventData.hasOwnProperty('id') &&
+          eventData.hasOwnProperty('body')
+      ) {
+        // todo: update the note body with what server has right now, but first double check its not active not
+        // if it is watcher must be disconnected to avoid double save. look into nextTick
+
+        // if condition
+        //   this.note.isReceivingUpdate = true
+      
+        let updateNote = this.notes.find(note => note.id === eventData.id);
+        
+        updateNote.body = eventData.body;
+
+        //   nextTick(()=>{
+        //       this.note.isReceivingUpdate = false
+        //   })
+      }
+    }
+
     axios.get("/notes").then((response) => {
       if (0 !== response.data.notes.length) {
         this.notes = response.data.notes;
