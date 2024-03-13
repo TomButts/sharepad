@@ -5,11 +5,12 @@
     <Notelist 
       :notes="notes"
       v-on:select-note="changeNote($event)"
+      v-on:handle-share="handleShare($event)"
       v-on:new-note="newNote"
     >
     </Notelist>
+    <Share :visible="showShareModal" :note="activeShareNote" v-on:close-share-modal="closeShareModal"></Share>
     <Notepad :note="note"></Notepad>
-    <Share :visible="1" :participants="participants"></Share>
 </div>
 {% endblock %}
 

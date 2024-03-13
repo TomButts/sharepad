@@ -1,15 +1,18 @@
 <style scoped>
-  .modal {
-    display: none;
+  .modal-backdrop {
     position: fixed;
-    z-index: 1;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0, 0, 0);
-    background-color: rgba(0, 0, 0, 0.4);
+
+    z-index: 500;
+
+    width: 100vw;
+    height: 100vh;
+
+    background: rgba(0, 0, 0, 0.2);
+
+    display: grid;
+    place-items: center;
   }
 
   .modal-content {
@@ -17,38 +20,99 @@
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 40%;
+  }
+  .modal-header,
+  .modal-footer {
+    padding: 15px;
+    display: flex;
   }
 
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+  .modal-header {
+    position: relative;
+    border-bottom: 1px solid #eeeeee;
+    color: #4AAE9B;
+    justify-content: space-between;
   }
 
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
+  .modal-footer {
+    border-top: 1px solid #eeeeee;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .modal-body {
+    position: relative;
+    padding: 20px 10px;
+  }
+
+  .btn-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    font-size: 20px;
+    padding: 10px;
     cursor: pointer;
+    font-weight: bold;
+    color: #4AAE9B;
+    background: transparent;
   }
 
-  @keyframes animatetop {
-    from {top: -300px; opacity: 0}
-    to {top: 0; opacity: 1}
+  .btn-green {
+    color: white;
+    background: #4AAE9B;
+    border: 1px solid #4AAE9B;
+    border-radius: 2px;
+  }
+
+  .modal-fade-enter-from,
+  .modal-fade-leave-to {
+    opacity: 0;
+  }
+
+  .modal-fade-enter-active,
+  .modal-fade-leave-active {
+    transition: 0.25s ease all;
   }
 </style>
 
 <template>
-  <div class="modal" v-show="visible">
-    <span class="close">&times;</span>
-    <slot></slot>
-  </div>
+  <Teleport to="body">
+    <Transition name="modal-fade">
+      <div class="modal-backdrop" v-show="visible">
+        <div class="modal-content">
+          <header class="modal-header">
+            <slot name="header">
+              This is the default title!
+            </slot>
+            <button
+              type="button"
+              class="btn-close"
+              @click="closeModal"
+            >
+              x
+            </button>
+          </header>
+
+          <section class="modal-body">
+            <slot name="body">
+              This is the default body!
+            </slot>
+          </section>
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <script>
   export default {
     props: ["visible"],
+    methods: {
+      closeModal: function () {
+        this.$emit("close-modal");
+      },
+    }
   };
 </script>

@@ -38,7 +38,7 @@
         this.$emit("select-note", id);
       },
       handleShare: function (id) {
-        console.log('hey shared')
+        this.$emit("handle-share", id);
       },
       newNote: function () {
         this.$emit("new-note");

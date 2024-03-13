@@ -25,7 +25,7 @@ class Note
     private $id;
 
     /**
-     * @Groups("user_data")
+     * @Groups("note")
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="notes")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
@@ -49,7 +49,7 @@ class Note
 
     /**
      * @Groups("note")
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="sharedNotes")
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="sharedNotes", cascade={"persist", "refresh"})
      */
     private $participants;
 

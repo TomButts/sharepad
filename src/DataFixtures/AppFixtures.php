@@ -16,6 +16,12 @@ class AppFixtures extends Fixture
         $this->passwordEncoder = $passwordEncoder;
     }
 
+    /**
+     * Fixtures for developer testing.
+     *
+     * @param ObjectManager $manager
+     * @return void
+     */
     public function load(ObjectManager $manager): void
     {
         $user = new User();
@@ -25,9 +31,17 @@ class AppFixtures extends Fixture
         
         $manager->persist($user);
 
-        // another user
+        // another user for testing shared notes
         $user = new User();
         $user->setEmail('test1@test.com');
+        $user->setPassword($this->passwordEncoder->encodePassword($user, 'password'));
+        $user->setRoles(['ROLE_USER']);
+
+        $manager->persist($user);
+
+        // user for testing unauthorised access to mercure topics
+        $user = new User();
+        $user->setEmail('unauthorised@test.com');
         $user->setPassword($this->passwordEncoder->encodePassword($user, 'password'));
         $user->setRoles(['ROLE_USER']);
 

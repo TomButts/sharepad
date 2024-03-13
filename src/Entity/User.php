@@ -24,6 +24,7 @@ class User implements UserInterface
     private $id;
 
     /**
+     * @Groups("note")
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
@@ -40,7 +41,6 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @Groups("note_data")
      * @ORM\OneToMany(targetEntity=Note::class, mappedBy="owner")
      */
     private $notes;

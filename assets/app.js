@@ -1,7 +1,7 @@
 import "./styles/app.scss";
 import "./bootstrap";
 import Vue from "vue";
-import { nextTick } from "vue";
+// import { nextTick } from "vue";
 import axios from "axios";
 import Notepad from "./components/Notepad.vue";
 import Notelist from "./components/Notelist.vue";
@@ -16,18 +16,6 @@ let blankNote = {
   updated_at: moment().format('DD-MM-YY HH:mm:ss'),
 };
 
-// dev stub: remove in next phase: adding real verified secure participants
-const participants = [
-  {
-    id: 101,
-    email: 'buddy.guy@friend.com'
-  },
-  {
-    id: 202,
-    email: 'not.your@buddy.com'
-  }
-];
-
 new Vue({
   el: "#app",
   components: { Notepad, Notelist, Share },
@@ -35,7 +23,8 @@ new Vue({
     return {
       note: blankNote,
       notes: [blankNote],
-      participants: participants
+      activeShareNote: blankNote,
+      showShareModal: false
     };
   },
   methods: {
@@ -51,6 +40,22 @@ new Vue({
       this.notes.splice(selectedNoteIndex, 1);
 
       this.popNewNote(selectedNote);
+    },
+    handleShare: function (sharedNoteId) {
+      // todo: load in note participant details
+
+      const noteToShare = this.notes.find(note => note.id === sharedNoteId);
+
+      if (!noteToShare) {
+        // todo: handle error
+      }
+
+      this.activeShareNote = noteToShare;
+
+      this.showShareModal = true;
+    },
+    closeShareModal: function () {
+      this.showShareModal = false;
     },
     popNewNote: function (note) {
       this.notes.unshift(note);
@@ -72,10 +77,6 @@ new Vue({
   watch: {
     note: {
       handler: debounce(function (e) {
-        if (this.note.isReceivingUpdate) {
-          return;
-        }
-
         axios
           .post("/note/save", {
             id: this.note.id,
@@ -91,36 +92,28 @@ new Vue({
     },
   },
   mounted() {
-    const eventSource = new EventSource(JSON.parse(document.getElementById("mercure-url").textContent));
-    
-    eventSource.onmessage = event => {
-      const eventData = JSON.parse(event.data)
-
-      if (eventData.hasOwnProperty('id') &&
-          eventData.hasOwnProperty('body')
-      ) {
-        // todo: update the note body with what server has right now, but first double check its not active not
-        // if it is watcher must be disconnected to avoid double save. look into nextTick
-
-        // if condition
-        //   this.note.isReceivingUpdate = true
-      
-        let updateNote = this.notes.find(note => note.id === eventData.id);
-        
-        updateNote.body = eventData.body;
-
-        //   nextTick(()=>{
-        //       this.note.isReceivingUpdate = false
-        //   })
-      }
-    }
-
     axios.get("/notes").then((response) => {
       if (0 !== response.data.notes.length) {
         this.notes = response.data.notes;
         
         if (response.data.notes && response.data.notes.length > 0) {
           this.note = response.data.notes[0];
+        }
+      }
+    }).then((response) => {
+      const eventSource = new EventSource(
+        JSON.parse(document.getElementById("mercure-url").textContent), { withCredentials: true }
+      );
+
+      eventSource.onmessage = event => {
+        const eventData = JSON.parse(event.data)
+  
+        if (eventData.hasOwnProperty('id') && eventData.hasOwnProperty('body')) {
+          // todo: when updating current note prevent save note watcher update, when its a mercure based update.
+          // look into nextTick  
+          let updateNote = this.notes.find(note => note.id === eventData.id);
+          
+          updateNote.body = eventData.body;
         }
       }
     });

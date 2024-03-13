@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mercure\Authorization;
 use App\Entity\Note;
 use App\Repository\NoteRepository;
 use DateTimeImmutable;
@@ -22,14 +23,21 @@ class NoteController extends AbstractController
         return $this->render('Notepad/index.html.twig');
     }
 
-    public function notes(NoteRepository $noteRepository): JsonResponse
+    public function notes(Request $request, Authorization $authorisation): JsonResponse
     {
-        return $this->json(
-            ['notes' => $this->getUser()->getAllEditableNotes()],
-            Response::HTTP_OK,
-            [],
-            ['groups' => 'note']
-        );
+        $notes = $this->getUser()->getAllEditableNotes();
+
+        $clientNoteURIs = [];
+
+        foreach ($notes as $note) {
+            $clientNoteURIs[] = sprintf('/note/%d', $note->getId());
+        }
+
+        // set client to be authorised to editable notes only, using mecure cookie auth 
+        // @see https://symfony.com/doc/current/mercure.html#programmatically-setting-the-cookie
+        $authorisation->setCookie($request, $clientNoteURIs, $clientNoteURIs);
+        
+        return $this->json(['notes' => $notes], Response::HTTP_OK, [], ['groups' => ['note']]);
     }
 
     /**
@@ -78,12 +86,16 @@ class NoteController extends AbstractController
         $em->persist($note);
         $em->flush();
 
-        $updatedNote = new Update(sprintf('/note/%d', $note->getId()), json_encode([
-            'id' => $note->getId(),
-            'body' => $note->getBody()
-        ]));
+        $updatedNoteEvent = new Update(
+            sprintf('/note/%d', $note->getId()),
+            json_encode([
+                'id' => $note->getId(),
+                'body' => $note->getBody()
+            ]),
+            true
+        );
 
-        $hub->publish($updatedNote);
+        $hub->publish($updatedNoteEvent);
 
         return $this->json(['note' => $note], Response::HTTP_OK, [], ['groups' => 'note']);
     }
