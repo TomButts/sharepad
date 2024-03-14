@@ -19,8 +19,10 @@
           v-on:click="selectNote(note.id)"
         >
           <div class="notes__small-title">{{ title(note.body) }}
-            <!-- todo: icons -->
-            <span class="share-icon" v-on:click="handleShare(note.id)">+++</span>
+            <!-- todo: share icon -->
+            <span class="share-icon" v-on:click.stop="handleShare(note.id)">
+              +++
+            </span>
           </div>
           <div class="notes__small-body">{{ preview(note.body) }}</div>
           <div class="notes__small-updated">{{ note.updated_at }}</div>

@@ -25,7 +25,7 @@ new Vue({
       notes: [blankNote],
       activeShareNote: blankNote,
       showShareModal: false
-    };
+    }
   },
   methods: {
     changeNote: function (id) {

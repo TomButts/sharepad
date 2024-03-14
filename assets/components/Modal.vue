@@ -81,18 +81,11 @@
   <Teleport to="body">
     <Transition name="modal-fade">
       <div class="modal-backdrop" v-show="visible">
-        <div class="modal-content">
+        <div class="modal-content" ref="modalContent">
           <header class="modal-header">
             <slot name="header">
               This is the default title!
             </slot>
-            <button
-              type="button"
-              class="btn-close"
-              @click="closeModal"
-            >
-              x
-            </button>
           </header>
 
           <section class="modal-body">
@@ -109,10 +102,18 @@
 <script>
   export default {
     props: ["visible"],
+    mounted() {
+      document.addEventListener("click", this.handleClickOutside);
+    },
+    beforeUnmount() {
+      document.removeEventListener("click", this.handleClickOutside);
+    },
     methods: {
-      closeModal: function () {
-        this.$emit("close-modal");
-      },
+      handleClickOutside(event) {
+        if (event.target && !this.$refs.modalContent.contains(event.target)) {
+          this.$emit("close-modal");
+        }
+      }
     }
   };
 </script>

@@ -1,10 +1,36 @@
 <style scoped>
- .remove-participant {
-   float: right;
- }
+  .remove-participant {
+    float: right;
+  }
 
- .share-email-list {
+  .participant-email {
+    display: inline-block;
+    margin-right: 8px;
+  }
+
+  .share-email-list {
     list-style-type: none;
+    padding-left: 0;
+  }
+
+  .share__note {
+    padding: 16px;
+  }
+
+  .email-input-container {
+    display: flex;
+    padding-bottom: 0.5rem;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .email-input-container::after {
+    content: "";
+    flex: auto;
+  }
+
+  #share-email-input {
+    flex: 4;
   }
   /* todo: add secondary flexible button style to app.scss - notes__button*/
 </style>
@@ -17,9 +43,9 @@
       </template>
       <template v-slot:body>
         <div class="share__note">
-          <div id="email-input">
-            <input placeholder="Email address" v-model="email">
-            <button type="button" class="notes__button" @click="addParticipant">Invite</button>
+          <div class="email-input-container">
+            <input id="share-email-input" placeholder="Email address" v-model="email">
+            <button id="share-email-button" class="button" type="button" @click="addParticipant">Invite</button>
           </div>
           <ul class="share-email-list">
             <template v-if="note.hasOwnProperty('participants') && note.participants.length > 0">
@@ -54,11 +80,14 @@
       addParticipant: function () {
         // todo: axios request.then(below code, or validation error)
         // todo: think about sharing with non registered users
+        // todo: maybe flash a message about it being successful
+        if ('' === this.email) {
+          return;
+        }
+
         this.note.participants.push({email: this.email})
 
         this.email = '';
-
-        // todo: maybe flash a message about it being successful
       },
       removeParticipant: function (participantEmail) {
         this.note.participants = this.note.participants
