@@ -1,0 +1,22 @@
+{
+  "notes": [
+    {
+      "id":1,
+      "owner": {
+        "email": "test@test.com"
+      },
+      "body": "Note 1 \n\n\n\nAdditional text",
+      "participants": [],
+      "created_at": "11-03-2024 15:55:46",
+      "updated_at": "18-03-2024 16:08:34"
+    },
+    {
+      "id":2,
+      "owner": {"email":"test1@test.com"},
+      "body": "This one is a shared note \n\n\nadditional text",
+      "participants": [{"email":"test@test.com"}],
+      "created_at": "11-03-2024 15:33:47",
+      "updated_at": "18-03-2024 11:26:46"
+    }
+  ]
+}

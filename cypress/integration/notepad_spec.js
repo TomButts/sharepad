@@ -25,11 +25,4 @@ describe("Notepad tests", () => {
     cy.visit("/").get(".notes__body").type("Hello, Friend");
     cy.get(".notes__body").should('have.value', "Hello, Friend");
   });
-
-  // todo: simple writing notes test
-  // it("let user write notes", () => {
-  //   cy.intercept("GET", "/notes", { notes: [] });
-  //   cy.visit("/").get(".notes__body").type("Hello, Friend");
-  //   cy.get(".notes__body").contains("Hello, Friend");
-  // });
 });
