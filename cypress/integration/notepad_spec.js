@@ -26,7 +26,7 @@ describe("Notepad tests", () => {
     cy.get(".notes__body").should('have.value', "Hello, Friend");
   });
 
-  // todo before all not working for second test?
+  // todo: simple writing notes test
   // it("let user write notes", () => {
   //   cy.intercept("GET", "/notes", { notes: [] });
   //   cy.visit("/").get(".notes__body").type("Hello, Friend");

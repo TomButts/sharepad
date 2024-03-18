@@ -1,7 +1,7 @@
 import user from "../fixtures/user.json";
 
 describe("Test Login Features", () => {
-  it("login page displays (when unauthenticated)", () => {
+  it("login page displays after successfull authentication)", () => {
     // index should redirect to login page
     cy.visit("/");
     cy.url().should("include", "/login");
@@ -20,7 +20,7 @@ describe("Test Login Features", () => {
     cy.contains("Add Note");
   });
 
-  it("logs out", () => {
+  it("user can log out", () => {
     cy.visit("/logout");
     cy.contains("Email address");
     cy.contains("Password");

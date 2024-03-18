@@ -32,26 +32,26 @@
   #share-email-input {
     flex: 4;
   }
-  /* todo: add secondary flexible button style to app.scss - notes__button*/
 </style>
 
 <template>
   <div>
     <Modal :visible="visible" v-on:close-modal="closeModal()">
-      <template v-slot:header>
-        Share Note
-      </template>
+      <template v-slot:header>Share Note</template>
       <template v-slot:body>
         <div class="share__note">
           <div class="email-input-container">
             <input id="share-email-input" placeholder="Email address" v-model="email">
             <button id="share-email-button" class="button" type="button" @click="addParticipant">Invite</button>
           </div>
+          <div class="email-input-err error" v-if="showError">
+            Please enter a valid email address!
+          </div>
           <ul class="share-email-list">
             <template v-if="note.hasOwnProperty('participants') && note.participants.length > 0">
               <template v-for="(participant) in note.participants">
                 <li v-bind:key="participant.id">
-                  {{ participant.email }}<span class="remove-participant" @click="removeParticipant(participant.email)">&times;</span>
+                  {{ participant.email }}<span class="remove-participant" @click.stop="removeParticipant(note.id, participant.email)">&times;</span>
                 </li>
               </template>
             </template>
@@ -67,35 +67,52 @@
 
 <script>
   import Modal from "../components/Modal.vue";
+  import { emailValidationMixin } from '../Mixins/EmailValidationMixin.js';
+  import axios from "axios";
 
   export default {
+    mixins: [emailValidationMixin],
     props: ["note", "visible"],
     data() {
       return {
-        email: ''
+        email: '',
+        showError: false
       }
     },
     components: { Modal },
     methods: {
       addParticipant: function () {
-        // todo: axios request.then(below code, or validation error)
-        // todo: think about sharing with non registered users
-        // todo: maybe flash a message about it being successful
-        if ('' === this.email) {
+        if ('' === this.email || !this.$isValidEmail(this.email)) {
+          this.showError = true;
+
           return;
         }
 
-        this.note.participants.push({email: this.email})
+        this.showError = false;
 
-        this.email = '';
+        axios.post("/note/participant/add", {
+          note_id: this.note.id,
+          email: this.email,
+        })
+        .then((response) => {
+          this.note.participants.push({email: this.email})
+
+          this.email = '';
+        }).catch((error) => {
+          // todo: handling
+        });
       },
-      removeParticipant: function (participantEmail) {
-        this.note.participants = this.note.participants
-          .filter(participant => participant.email !== participantEmail)
-
-        // todo: axios to validate and remove. then below
-        this.note.participants
-
+      removeParticipant: function (noteId, participantEmail) {
+        axios.post("/note/participant/remove", {
+          note_id: noteId,
+          email: participantEmail,
+        })
+        .then((response) => {
+          this.note.participants = this.note.participants
+            .filter(participant => participant.email !== participantEmail)
+        }).catch((error) => {
+          // todo: handling
+        })
       },
       closeModal: function () {
         this.$emit("close-share-modal")

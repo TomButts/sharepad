@@ -78,7 +78,6 @@
 </style>
 
 <template>
-  <Teleport to="body">
     <Transition name="modal-fade">
       <div class="modal-backdrop" v-show="visible">
         <div class="modal-content" ref="modalContent">
@@ -96,7 +95,6 @@
         </div>
       </div>
     </Transition>
-  </Teleport>
 </template>
 
 <script>

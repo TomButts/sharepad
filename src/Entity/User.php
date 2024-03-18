@@ -211,7 +211,18 @@ class User implements UserInterface
         foreach ($accessibleNotes as $note) {
             if ($note->getId() === $noteId) {
                 return true;
-            }        
+            }
+        }
+
+        return false;
+    }
+
+    public function isNoteOwner(int $noteId): bool
+    {
+        foreach ($this->getNotes() as $ownedNote) {
+            if ($ownedNote->getId() === $noteId) {
+                return true;
+            }
         }
 
         return false;

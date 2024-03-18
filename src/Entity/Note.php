@@ -173,4 +173,11 @@ class Note
 
         return $this;
     }
+
+    public function getParticipantEmails(): array
+    {
+        return $this->getParticipants()->map(function($participant) {
+            return $participant->getEmail();
+        })->toArray();
+    }
 }

@@ -1,7 +1,6 @@
 import "./styles/app.scss";
 import "./bootstrap";
 import Vue from "vue";
-// import { nextTick } from "vue";
 import axios from "axios";
 import Notepad from "./components/Notepad.vue";
 import Notelist from "./components/Notelist.vue";
@@ -36,14 +35,11 @@ new Vue({
       // todo: save final state of previous active note
       let selectedNote = this.notes[selectedNoteIndex];
 
-      // move element to front of array
       this.notes.splice(selectedNoteIndex, 1);
 
       this.popNewNote(selectedNote);
     },
     handleShare: function (sharedNoteId) {
-      // todo: load in note participant details
-
       const noteToShare = this.notes.find(note => note.id === sharedNoteId);
 
       if (!noteToShare) {
@@ -95,7 +91,7 @@ new Vue({
     axios.get("/notes").then((response) => {
       if (0 !== response.data.notes.length) {
         this.notes = response.data.notes;
-        
+
         if (response.data.notes && response.data.notes.length > 0) {
           this.note = response.data.notes[0];
         }
@@ -107,12 +103,12 @@ new Vue({
 
       eventSource.onmessage = event => {
         const eventData = JSON.parse(event.data)
-  
+
         if (eventData.hasOwnProperty('id') && eventData.hasOwnProperty('body')) {
           // todo: when updating current note prevent save note watcher update, when its a mercure based update.
-          // look into nextTick  
+          // look into nextTick
           let updateNote = this.notes.find(note => note.id === eventData.id);
-          
+
           updateNote.body = eventData.body;
         }
       }

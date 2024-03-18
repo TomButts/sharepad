@@ -12,8 +12,16 @@ index:
 
 notes:
    path: /notes
-   controller: App\Controller\NoteController::notes      
+   controller: App\Controller\NoteController::notes
 
 notes_save:
    path: /note/save
    controller: App\Controller\NoteController::saveNote
+
+notes_add_participant:
+   path: /note/participant/add
+   controller: App\Controller\NoteController::addParticipant
+
+notes_remove_participant:
+   path: /note/participant/remove
+   controller: App\Controller\NoteController::removeParticipant

@@ -20,7 +20,7 @@
         >
           <div class="notes__small-title">{{ title(note.body) }}
             <!-- todo: share icon -->
-            <span class="share-icon" v-on:click.stop="handleShare(note.id)">
+            <span class="share-icon" @click.stop="handleShare(note.id)">
               +++
             </span>
           </div>
