@@ -50,6 +50,4 @@ jobs:
       with:
         build: npm run build
         start: npm run dev-server
-        wait-on: 'http://localhost:8080'
-        wait-on-timeout: 120
         browser: chrome
