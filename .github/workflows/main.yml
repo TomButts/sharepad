@@ -8,9 +8,9 @@ jobs:
 
     env:
         DB_DATABASE: sharepad
-        DB_USER: user
-        DB_PASSWORD: password
-        DATABASE_URL: mysql://user:password@db:3306/sharepad?serverVersion=5.7.44-mysql
+        DB_USER: root
+        DB_PASSWORD: root
+        DATABASE_URL: mysql://root:root@db:3306/sharepad?serverVersion=5.7.44-mysql
 
     steps:
     - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
