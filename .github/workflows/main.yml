@@ -37,7 +37,6 @@ jobs:
       run: |
         sudo /etc/init.d/mysql start
         mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u$DB_USER -p$DB_PASSWORD
-        php bin/console doctrine:schema:create --env=test
         php bin/console doctrine:migrations:migrate --env=test
         php bin/console doctrine:fixtures:load --env=test
 
