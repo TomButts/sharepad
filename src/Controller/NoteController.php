@@ -170,14 +170,12 @@ class NoteController extends AbstractController
 
         $em->flush();
 
-        $updatedNoteEvent = new Update(
-            sprintf('/note/%d', $note->getId()),
-            json_encode([
-                'id' => $note->getId(),
-                'participants' => $note->getParticipantEmails(),
-            ]),
-            true
-        );
+        $noteEventPayload = json_encode([
+            'id' => $note->getId(),
+            'participants' => $note->getParticipantEmails(),
+        ]);
+
+        $updatedNoteEvent = new Update(sprintf('/note/%d', $note->getId()), $noteEventPayload, true);
 
         $hub->publish($updatedNoteEvent);
 
