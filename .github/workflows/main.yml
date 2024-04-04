@@ -5,6 +5,13 @@ on: push
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
+
+    env:
+        DB_DATABASE: sharepad
+        DB_USER: user
+        DB_PASSWORD: password
+        DATABASE_URL: mysql://user:password@db:3306/sharepad?serverVersion=5.7.44-mysql
+
     steps:
     - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
       with:
@@ -28,13 +35,13 @@ jobs:
 
     - name: Create Database
       run: |
+        sudo /etc/init.d/mysql start
+        mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u$DB_USER -p$DB_PASSWORD
         php bin/console doctrine:schema:create
         php bin/console doctrine:migrations:migrate
         php bin/console doctrine:fixtures:load
 
     - name: Execute tests via PHPUnit
-      env:
-        DATABASE_URL: mysql://user:password@db:3306/sharepad?serverVersion=5.7.44-mysql
       run: vendor/bin/phpunit
 
     - name: Cypress run
