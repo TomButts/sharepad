@@ -31,7 +31,9 @@ jobs:
           ${{ runner.os }}-php-
 
     - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      run: |
+      composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      npm install
 
     - name: Create Database
       run: |
@@ -43,8 +45,14 @@ jobs:
     - name: Execute tests via PHPUnit
       run: vendor/bin/phpunit
 
+    - name: Start SPA App
+       run: |
+        npm install
+        npm encore production
+        npm encore dev
+
     - name: Cypress run
       uses: cypress-io/github-action@v6
       with:
-        build: npm encore production --progress
-        start: npm encore dev
+        build: npm build
+        start: npm start
