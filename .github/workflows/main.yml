@@ -45,9 +45,6 @@ jobs:
     - name: Execute tests via PHPUnit
       run: vendor/bin/phpunit
 
-    - name: Start SPA App
-      run: npm run watch
-
     - name: Cypress tests
       uses: cypress-io/github-action@v6
       with:
