@@ -46,10 +46,10 @@ jobs:
       run: vendor/bin/phpunit
 
     - name: Start SPA App
-       run: |
-        npm install
-        npm encore production
-        npm encore dev
+      run: |
+      npm install
+      npm encore production
+      npm encore dev
 
     - name: Cypress run
       uses: cypress-io/github-action@v6
