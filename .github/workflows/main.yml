@@ -10,7 +10,7 @@ jobs:
         DB_DATABASE: sharepad
         DB_USER: root
         DB_PASSWORD: root
-        DATABASE_URL: mysql://root:root@db:3306/sharepad
+        DATABASE_URL: mysql://root:root@127.0.0.1:3306/sharepad
 
     steps:
     - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
