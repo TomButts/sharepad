@@ -33,7 +33,7 @@ jobs:
     - name: Install Dependencies
       run: |
         composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-        npm install
+        npm ci
 
     - name: Create Database
       run: |
@@ -48,5 +48,5 @@ jobs:
     - name: Cypress tests
       uses: cypress-io/github-action@v6
       with:
-        build: npm build
-        start: npm start
+        build: npm run build
+        start: npm run dev-server
