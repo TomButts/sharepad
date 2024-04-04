@@ -47,9 +47,9 @@ jobs:
 
     - name: Start SPA App
       run: |
-      npm install
-      npm encore production
-      npm encore dev
+        npm install
+        npm encore production
+        npm encore dev
 
     - name: Cypress run
       uses: cypress-io/github-action@v6
