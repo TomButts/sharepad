@@ -172,12 +172,12 @@ class NoteController extends AbstractController
 
         $noteEventPayload = json_encode([
             'id' => $note->getId(),
-               'participants' => $note->getParticipantEmails(),
+            'participants' => $note->getParticipantEmails(),
         ]);
 
-           $updatedNoteEvent = new Update(sprintf('/note/%d', $note->getId()), $noteEventPayload, true);
+        $updatedNoteEvent = new Update(sprintf('/note/%d', $note->getId()), $noteEventPayload, true);
 
-          $hub->publish($updatedNoteEvent);
+        $hub->publish($updatedNoteEvent);
 
         return $this->json(['message' => 'Participant added successfully'], Response::HTTP_OK);
     }
