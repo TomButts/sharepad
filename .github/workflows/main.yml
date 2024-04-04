@@ -3,7 +3,7 @@ name: Automated Tests
 on: push
 
 jobs:
-  cypress-run:
+  run-automated-tests:
     runs-on: ubuntu-22.04
 
     env:
@@ -33,11 +33,10 @@ jobs:
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-    - name: Create Database
+    - name: Create Fixtures
       run: |
         sudo /etc/init.d/mysql start
         mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u$DB_USER -p$DB_PASSWORD
-        php bin/console doctrine:schema:create
         php bin/console doctrine:migrations:migrate
         php bin/console doctrine:fixtures:load
 
