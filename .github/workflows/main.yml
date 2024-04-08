@@ -50,9 +50,9 @@ jobs:
       uses: cypress-io/github-action@v6
       with:
         build: npm run build
-        start: npm run dev-server
+        start: npm run dev-server --port 8084
         wait-on: 'http://localhost:8084'
-        wait-on-timeout: 120
+        wait-on-timeout: 30
         browser: chrome
 
     - name: Upload screenshots
