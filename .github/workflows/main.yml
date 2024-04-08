@@ -43,7 +43,9 @@ jobs:
         php bin/console doctrine:fixtures:load --env=test
 
     - name: Execute tests via PHPUnit
-      run: vendor/bin/phpunit
+      run: |
+        vendor/bin/phpunit
+        curl -i http://localhost:8080
 
     - name: Cypress tests
       uses: cypress-io/github-action@v6
