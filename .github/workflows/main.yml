@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-22.04
 
     env:
-        DB_DATABASE: sharepad
-        DB_USER: root
-        DB_PASSWORD: root
-        DATABASE_URL: mysql://root:root@127.0.0.1:3306/sharepad
+      DB_DATABASE: sharepad
+      DB_USER: root
+      DB_PASSWORD: root
+      DATABASE_URL: mysql://root:root@127.0.0.1:3306/sharepad
 
     steps:
     - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
@@ -50,8 +50,8 @@ jobs:
       uses: cypress-io/github-action@v6
       with:
         build: npm run build
-        start: npm run dev-server --port 8084
-        wait-on: 'http://localhost:8084'
+        start: npm run dev-server
+        wait-on: 'http://localhost:8080'
         wait-on-timeout: 30
         browser: chrome
 
@@ -60,4 +60,4 @@ jobs:
       if: failure()
       with:
         name: cypress-screenshots
-        path: cypress/screenshots/*
+        path: cypress/screenshots
