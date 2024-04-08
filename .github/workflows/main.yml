@@ -45,7 +45,7 @@ jobs:
     - name: Execute tests via PHPUnit
       run: |
         vendor/bin/phpunit
-        curl -i http://localhost:8000
+        netstat -lt
 
     - name: Cypress tests
       uses: cypress-io/github-action@v6
