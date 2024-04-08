@@ -51,8 +51,6 @@ jobs:
       with:
         build: npm run build
         start: npm run dev-server
-        wait-on: 'http://localhost:8080/login'
-        wait-on-timeout: 5
         browser: chrome
 
     - name: Upload screenshots
