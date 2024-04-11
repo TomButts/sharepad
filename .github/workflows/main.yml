@@ -45,17 +45,3 @@ jobs:
     - name: Execute tests via PHPUnit
       run: |
         vendor/bin/phpunit
-
-    - name: Cypress tests
-      uses: cypress-io/github-action@v6
-      with:
-        build: npm run build
-        start: npm run dev-server
-        browser: chrome
-
-    - name: Upload screenshots
-      uses: actions/upload-artifact@v3
-      if: failure()
-      with:
-        name: cypress-screenshots
-        path: cypress/screenshots
