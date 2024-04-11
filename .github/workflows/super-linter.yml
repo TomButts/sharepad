@@ -1,24 +1,18 @@
 name: Lint Code Base
 
-on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+on: push
+
 jobs:
   run-lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          php-version: '7.4.0'
-          fetch-depth: 0
 
       - name: Install Dependencies
         run: |
+          composer update --prefer-dist --no-progress --ignore-platform-req=php
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          npm ci
 
       - name: Lint Code Base
         uses: github/super-linter@v4
