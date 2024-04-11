@@ -35,8 +35,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          npm ci
+          composer update --prefer-dist --no-progress --ignore-platform-req=php
 
       - name: Lint Code Base
         uses: github/super-linter@v4
