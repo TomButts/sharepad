@@ -7,6 +7,5 @@ parameters:
         - src/
         - tests/
     checkGenericClassInNonGenericObjectType: false
-    doctrine:
-        objectManagerLoader: tests/object-manager.php
-    
+    ignoreErrors:
+        - '#Property [a-zA-Z0-9\\_]+::\$id is never written, only read.#'
