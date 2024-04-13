@@ -15,7 +15,7 @@ const blankNote = {
   updated_at: moment().format('DD-MM-YY HH:mm:ss')
 }
 
-new Vue({
+new Vue({ // eslint-disable-line
   el: '#app',
   components: { Notepad, Notelist, Share },
   data () {
@@ -79,7 +79,7 @@ new Vue({
             body: this.note.body
           })
           .then(response => {
-            if (0 === this.note.id && 0 !== response.data.note) {
+            if (this.note.id === 0 && response.data.note !== 0) {
               this.note.id = response.data.note.id
             }
           })
@@ -91,7 +91,7 @@ new Vue({
     axios
       .get('/notes')
       .then(response => {
-        if (0 !== response.data.notes.length) {
+        if (response.data.notes.length !== 0) {
           this.notes = response.data.notes
 
           if (response.data.notes && response.data.notes.length > 0) {
@@ -100,7 +100,7 @@ new Vue({
         }
       })
       .then(response => {
-        const eventSource = new EventSource(
+        const eventSource = new EventSource( // eslint-disable-line
           JSON.parse(document.getElementById('mercure-url').textContent),
           { withCredentials: true }
         )
@@ -109,12 +109,12 @@ new Vue({
           const eventData = JSON.parse(event.data)
 
           if (
-            eventData.hasOwnProperty('id') &&
-            eventData.hasOwnProperty('body')
+            Object.prototype.hasOwnProperty.call(eventData, 'id') &&
+            Object.prototype.hasOwnProperty.call(eventData, 'body')
           ) {
             // todo: when updating current note prevent save note watcher update, when its a mercure based update.
             // look into nextTick
-            let updateNote = this.notes.find(note => note.id === eventData.id)
+            const updateNote = this.notes.find(note => note.id === eventData.id)
 
             updateNote.body = eventData.body
           }

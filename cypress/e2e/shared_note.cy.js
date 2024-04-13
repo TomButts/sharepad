@@ -26,7 +26,7 @@ describe('Note sharing and real time note updates test', () => {
       }).as('saveNote')
 
       cy.wait('@saveNote').then(interception => {
-        return
+
       })
     })
   })
