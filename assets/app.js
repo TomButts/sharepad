@@ -8,7 +8,7 @@ import Share from './components/Share.vue'
 import { debounce } from 'debounce'
 import moment from 'moment'
 
-let blankNote = {
+const blankNote = {
   id: 0,
   body: '',
   created_at: moment().format('DD-MM-YY HH:mm:ss'),
@@ -33,7 +33,7 @@ new Vue({
       })
 
       // todo: save final state of previous active note
-      let selectedNote = this.notes[selectedNoteIndex]
+      const selectedNote = this.notes[selectedNoteIndex]
 
       this.notes.splice(selectedNoteIndex, 1)
 

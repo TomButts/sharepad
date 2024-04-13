@@ -45,3 +45,4 @@ jobs:
     - name: Execute tests via PHPUnit
       run: |
         vendor/bin/phpunit
+
