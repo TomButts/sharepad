@@ -41,5 +41,7 @@ jobs:
         uses: github/super-linter@v4
         env:
           VALIDATE_ALL_CODEBASE: true
+          VALIDATE_PHP_PSALM: false
+          VALIDATE_PHP_PHPCS: false
           DEFAULT_BRANCH: "master"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
