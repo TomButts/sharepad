@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 class ExampleTest extends TestCase
 {
-    public function testTheSuiteIsRunning()
+    public function testTheSuiteIsRunning(): void
     {
         $math = 2 + 2;
 
