@@ -1,4 +1,4 @@
-import user from "../fixtures/user.json";
+import user from '../fixtures/user.json'
 
 // ***********************************************
 // This example commands.js shows you how to
@@ -26,16 +26,16 @@ import user from "../fixtures/user.json";
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add("loginByCSRF", (csrfToken) => {
+Cypress.Commands.add('loginByCSRF', csrfToken => {
   cy.request({
-    method: "POST",
-    url: "/login",
+    method: 'POST',
+    url: '/login',
     failOnStatusCode: false,
     form: true,
     body: {
       email: user.email,
       password: user.password,
-      _csrf_token: csrfToken,
-    },
-  });
-});
+      _csrf_token: csrfToken
+    }
+  })
+})
