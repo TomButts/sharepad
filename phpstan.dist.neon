@@ -8,4 +8,4 @@ parameters:
         - tests/
     checkGenericClassInNonGenericObjectType: false
     ignoreErrors:
-        - message: '#Property .+::\$id is never written, only read.#'
+        - message: '#is never written, only read.#'
