@@ -38,7 +38,7 @@ parserOptions:
 ###########
 plugins:
   - '@typescript-eslint'
-  - 'plugin:cypress/recommended'
+  - 'plugin:cypress'
 
 #########
 # Rules #
@@ -51,6 +51,12 @@ rules: {
 # Overrides for JSON parsing #
 ##############################
 overrides:
+  # cypress
+  - files:
+      - "*.cy.js"
+    extends:
+      - plugin:cypress/recommended
+    parser: eslint-plugin-cypress
 
   # JSON files
   - files:
