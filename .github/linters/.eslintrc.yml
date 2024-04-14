@@ -1,0 +1,6 @@
+extends:
+  - plugin:cypress/recommended
+rules:
+  no-new: 0
+env:
+  cypress/globals: true
