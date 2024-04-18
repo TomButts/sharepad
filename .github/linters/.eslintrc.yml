@@ -23,7 +23,7 @@ globals:
 ignorePatterns:
   - "!.*"
   - "**/node_modules/.*"
-  - "**/cypress/.*"
+  - "*.cy.js"
 
 ###############
 # Parser vars #
