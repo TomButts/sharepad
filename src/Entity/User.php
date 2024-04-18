@@ -21,34 +21,37 @@ class User implements UserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @Groups("note")
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $email;
+    private string $email;
 
     /**
+     * @var String[]
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
-    private $password;
+    private string $password;
 
     /**
+     * @var Collection<Note>
      * @ORM\OneToMany(targetEntity=Note::class, mappedBy="owner")
      */
-    private $notes;
+    private Collection $notes;
 
     /**
+     * @var Collection<Note>
      * @ORM\ManyToMany(targetEntity=Note::class, mappedBy="participants")
      */
-    private $sharedNotes;
+    private Collection $sharedNotes;
 
     public function __construct()
     {
@@ -61,7 +64,7 @@ class User implements UserInterface
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -83,8 +86,15 @@ class User implements UserInterface
         return (string) $this->email;
     }
 
+    public function getUserIdentifier(): string
+    {
+        return $this->getUsername();
+    }
+
     /**
      * @see UserInterface
+     *
+     * @return String[]
      */
     public function getRoles(): array
     {
@@ -95,6 +105,11 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param String[] $roles
+     *
+     * @return self
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -131,7 +146,7 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
@@ -194,6 +209,9 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return Note[]
+     */
     public function getAllEditableNotes(): array
     {
         $allNotes = array_merge(

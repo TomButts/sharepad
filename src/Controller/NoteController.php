@@ -34,7 +34,10 @@ class NoteController extends AbstractController
      */
     public function notes(Request $request, Authorization $authorisation): JsonResponse
     {
-        $notes = $this->getUser()->getAllEditableNotes();
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $notes = $user->getAllEditableNotes();
 
         $clientNoteURIs = [];
 
@@ -73,11 +76,14 @@ class NoteController extends AbstractController
         $noteId = filter_var($data->id, FILTER_VALIDATE_INT);
         $body = filter_var($data->body, FILTER_UNSAFE_RAW);
 
+        /** @var User $user */
+        $user = $this->getUser();
+
         if (0 === $noteId) {
             $note = new Note();
-            $note->setOwner($this->getUser());
+            $note->setOwner($user);
         } else {
-            if (!$this->getUser()->hasAccessToNote($noteId)) {
+            if (!$user->hasAccessToNote($noteId)) {
                 return $this->json(['message' => 'Could not update resource.'], Response::HTTP_FORBIDDEN);
             }
 
@@ -138,7 +144,10 @@ class NoteController extends AbstractController
         $noteId = filter_var($data->note_id, FILTER_VALIDATE_INT);
         $participantEmail = filter_var($data->email, FILTER_SANITIZE_EMAIL);
 
-        if (!$this->getUser()->isNoteOwner($noteId)) {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if (!$user->isNoteOwner($noteId)) {
             // For errors that would be expected to involve malicious intent do not return message information
             return $this->json([], Response::HTTP_FORBIDDEN);
         }
@@ -162,7 +171,7 @@ class NoteController extends AbstractController
             $participant->setPassword($temporaryPassword);
 
             $em->persist($participant);
-        } elseif ($this->getUser()->getId() === $participant->getId()) {
+        } elseif ($user->getId() === $participant->getId()) {
             return $this->json(['message' => 'The note owner can not be added as a participant.'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -209,7 +218,10 @@ class NoteController extends AbstractController
         $noteId = filter_var($data->note_id, FILTER_VALIDATE_INT);
         $participantEmail = filter_var($data->email, FILTER_SANITIZE_EMAIL);
 
-        if (!$this->getUser()->isNoteOwner($noteId)) {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if (!$user->isNoteOwner($noteId)) {
             return $this->json(['message' => ''], Response::HTTP_FORBIDDEN);
         }
 

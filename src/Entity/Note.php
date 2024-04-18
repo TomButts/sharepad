@@ -22,36 +22,37 @@ class Note
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @Groups("note")
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="notes")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
-    private $owner;
+    private User $owner;
 
     /**
      * @Groups("note")
      * @ORM\Column(type="text", nullable=true)
      */
-    private $body;
+    private ?string $body;
 
     /**
      * @ORM\Column(type="datetime_immutable")
      */
-    private $created_at;
+    private DateTimeImmutable $created_at;
 
     /**
      * @ORM\Column(type="datetime_immutable")
      */
-    private $updated_at;
+    private DateTimeImmutable $updated_at;
 
     /**
+     * @var Collection<User>
      * @Groups("note")
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="sharedNotes", cascade={"persist", "refresh"})
      */
-    private $participants;
+    private Collection $participants;
 
     public function __construct()
     {
@@ -109,13 +110,9 @@ class Note
      * @SerializedName("created_at")
      * @Groups("note")
      */
-    public function getCreatedAtFormatted(): ?string
+    public function getCreatedAtFormatted(): string
     {
-        if (null !== $this->created_at) {
-            return $this->created_at->format('d-m-Y H:i:s');
-        }
-
-        return null;
+        return $this->created_at->format('d-m-Y H:i:s');
     }
 
     public function setCreatedAt(DateTimeImmutable $created_at): self
@@ -136,11 +133,7 @@ class Note
      */
     public function getUpdatedAtFormatted(): ?string
     {
-        if (null !== $this->updated_at) {
-            return $this->updated_at->format('d-m-Y H:i:s');
-        }
-
-        return null;
+        return $this->updated_at->format('d-m-Y H:i:s');
     }
 
     public function setUpdatedAt(DateTimeImmutable $updated_at): self
@@ -174,6 +167,9 @@ class Note
         return $this;
     }
 
+    /**
+     * @return String[]
+     */
     public function getParticipantEmails(): array
     {
         return $this->getParticipants()->map(function($participant) {

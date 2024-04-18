@@ -1,24 +1,24 @@
-import "./styles/app.scss";
-import "./bootstrap";
-import Vue from "vue";
-import axios from "axios";
-import Notepad from "./components/Notepad.vue";
-import Notelist from "./components/Notelist.vue";
-import Share from "./components/Share.vue";
-import { debounce } from "debounce";
-import moment from "moment";
+import './styles/app.scss'
+import './bootstrap'
+import Vue from 'vue'
+import axios from 'axios'
+import Notepad from './components/Notepad.vue'
+import Notelist from './components/Notelist.vue'
+import Share from './components/Share.vue'
+import { debounce } from 'debounce'
+import moment from 'moment'
 
-let blankNote = {
+const blankNote = {
   id: 0,
-  body: "",
+  body: '',
   created_at: moment().format('DD-MM-YY HH:mm:ss'),
-  updated_at: moment().format('DD-MM-YY HH:mm:ss'),
-};
+  updated_at: moment().format('DD-MM-YY HH:mm:ss')
+}
 
-new Vue({
-  el: "#app",
+new Vue({ // eslint-disable-line
+  el: '#app',
   components: { Notepad, Notelist, Share },
-  data() {
+  data () {
     return {
       note: blankNote,
       notes: [blankNote],
@@ -28,90 +28,97 @@ new Vue({
   },
   methods: {
     changeNote: function (id) {
-      const selectedNoteIndex = this.notes.findIndex((note) => {
-        return note.id === id;
-      });
+      const selectedNoteIndex = this.notes.findIndex(note => {
+        return note.id === id
+      })
 
       // todo: save final state of previous active note
-      let selectedNote = this.notes[selectedNoteIndex];
+      const selectedNote = this.notes[selectedNoteIndex]
 
-      this.notes.splice(selectedNoteIndex, 1);
+      this.notes.splice(selectedNoteIndex, 1)
 
-      this.popNewNote(selectedNote);
+      this.popNewNote(selectedNote)
     },
     handleShare: function (sharedNoteId) {
-      const noteToShare = this.notes.find(note => note.id === sharedNoteId);
+      const noteToShare = this.notes.find(note => note.id === sharedNoteId)
 
       if (!noteToShare) {
         // todo: handle error
       }
 
-      this.activeShareNote = noteToShare;
+      this.activeShareNote = noteToShare
 
-      this.showShareModal = true;
+      this.showShareModal = true
     },
     closeShareModal: function () {
-      this.showShareModal = false;
+      this.showShareModal = false
     },
     popNewNote: function (note) {
-      this.notes.unshift(note);
-      this.note = note;
+      this.notes.unshift(note)
+      this.note = note
     },
     newNote: function () {
       if (this.note.body.length > 0) {
         axios
-          .post("/note/save", {
+          .post('/note/save', {
             id: this.note.id,
-            body: this.note.body,
+            body: this.note.body
           })
-          .then((response) => {
-            this.popNewNote(blankNote);
-          });
+          .then(response => {
+            this.popNewNote(blankNote)
+          })
       }
-    },
+    }
   },
   watch: {
     note: {
       handler: debounce(function (e) {
         axios
-          .post("/note/save", {
+          .post('/note/save', {
             id: this.note.id,
-            body: this.note.body,
+            body: this.note.body
           })
-          .then((response) => {
-            if (0 === this.note.id && 0 !== response.data.note) {
-              this.note.id = response.data.note.id;
+          .then(response => {
+            if (this.note.id === 0 && response.data.note !== 0) {
+              this.note.id = response.data.note.id
             }
-          });
+          })
       }, 500),
-      deep: true,
-    },
+      deep: true
+    }
   },
-  mounted() {
-    axios.get("/notes").then((response) => {
-      if (0 !== response.data.notes.length) {
-        this.notes = response.data.notes;
+  mounted () {
+    axios
+      .get('/notes')
+      .then(response => {
+        if (response.data.notes.length !== 0) {
+          this.notes = response.data.notes
 
-        if (response.data.notes && response.data.notes.length > 0) {
-          this.note = response.data.notes[0];
+          if (response.data.notes && response.data.notes.length > 0) {
+            this.note = response.data.notes[0]
+          }
         }
-      }
-    }).then((response) => {
-      const eventSource = new EventSource(
-        JSON.parse(document.getElementById("mercure-url").textContent), { withCredentials: true }
-      );
+      })
+      .then(response => {
+        const eventSource = new EventSource( // eslint-disable-line
+          JSON.parse(document.getElementById('mercure-url').textContent),
+          { withCredentials: true }
+        )
 
-      eventSource.onmessage = event => {
-        const eventData = JSON.parse(event.data)
+        eventSource.onmessage = event => {
+          const eventData = JSON.parse(event.data)
 
-        if (eventData.hasOwnProperty('id') && eventData.hasOwnProperty('body')) {
-          // todo: when updating current note prevent save note watcher update, when its a mercure based update.
-          // look into nextTick
-          let updateNote = this.notes.find(note => note.id === eventData.id);
+          if (
+            Object.prototype.hasOwnProperty.call(eventData, 'id') &&
+            Object.prototype.hasOwnProperty.call(eventData, 'body')
+          ) {
+            // todo: when updating current note prevent save note watcher update, when its a mercure based update.
+            // look into nextTick
+            const updateNote = this.notes.find(note => note.id === eventData.id)
 
-          updateNote.body = eventData.body;
+            updateNote.body = eventData.body
+          }
         }
-      }
-    });
-  },
-});
+      })
+  }
+})
