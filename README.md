@@ -1,3 +1,4 @@
+# Sharepad
 
 This project was created as a way for me to explore personal interests in web technologies. The app could be called an Apple Notes clone at a very early stage. So far basic note functionality, very basic sharing functionality, and real-time shared updates have been implemented.
 
