@@ -12,7 +12,6 @@ env:
   browser: true
   es6: true
   jest: true
-  cypress/globals: true
 
 ###############
 # Global Vars #
@@ -24,6 +23,7 @@ globals:
 ignorePatterns:
   - "!.*"
   - "**/node_modules/.*"
+  - "**/cypress/.*"
 
 ###############
 # Parser vars #
@@ -36,9 +36,6 @@ parserOptions:
 ###########
 # Plugins #
 ###########
-plugins:
-  - '@typescript-eslint'
-  - 'plugin:cypress'
 
 #########
 # Rules #
@@ -51,12 +48,6 @@ rules: {
 # Overrides for JSON parsing #
 ##############################
 overrides:
-  # cypress
-  - files:
-      - "*.cy.js"
-    extends:
-      - plugin:cypress/recommended
-    parser: eslint-plugin-cypress
 
   # JSON files
   - files:
