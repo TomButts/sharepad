@@ -24,6 +24,7 @@ ignorePatterns:
   - "!.*"
   - "**/node_modules/.*"
   - "*.cy.js"
+  - "**/cypress/**.js"
 
 ###############
 # Parser vars #
