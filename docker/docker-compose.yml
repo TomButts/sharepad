@@ -6,7 +6,6 @@ networks:
 services:
   web:
     image: nginx
-    # Add this row:
     command: [nginx-debug, '-g', 'daemon off;']
     container_name: nginx-container
     ports:
