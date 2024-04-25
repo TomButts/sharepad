@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mercure\Authorization;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class NoteController extends AbstractController
 {
@@ -122,7 +122,7 @@ class NoteController extends AbstractController
      * @param NoteRepository               $noteRepository
      * @param UserRepository               $userRepository
      * @param EntityManagerInterface       $em
-     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param UserPasswordHasherInterface  $passwordHasher
      * @param HubInterface                 $hub
      *
      * @return JsonResponse
@@ -132,7 +132,7 @@ class NoteController extends AbstractController
         NoteRepository $noteRepository,
         UserRepository $userRepository,
         EntityManagerInterface $em,
-        UserPasswordEncoderInterface $passwordEncoder,
+        UserPasswordHasherInterface $passwordHasher,
         HubInterface $hub
     ): JsonResponse {
         $data = $request->getContent();
@@ -166,7 +166,7 @@ class NoteController extends AbstractController
             $participant->setEmail($participantEmail);
             $participant->setRoles(['ROLE_USER']);
 
-            $temporaryPassword = $passwordEncoder->encodePassword($participant, 'password');
+            $temporaryPassword = $passwordHasher->hashPassword($participant, 'password');
 
             $participant->setPassword($temporaryPassword);
 

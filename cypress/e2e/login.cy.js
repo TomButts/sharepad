@@ -6,14 +6,14 @@ describe('Test Login Features', () => {
     cy.visit('/')
     cy.url().should('include', '/login')
 
-    cy.contains('Email address')
+    cy.contains('Email')
     cy.contains('Password')
     cy.contains('Sign in')
   })
 
   it('user can sign in', () => {
     cy.visit('/')
-    cy.get('#email').type(user.email).should('have.value', 'test@test.com')
+    cy.get('#username').type(user.email).should('have.value', 'test@test.com')
     cy.get('#password').type(user.password)
     cy.contains('Sign in').click()
     cy.url().should('include', '/')
@@ -22,7 +22,7 @@ describe('Test Login Features', () => {
 
   it('user can log out', () => {
     cy.visit('/logout')
-    cy.contains('Email address')
+    cy.contains('Email')
     cy.contains('Password')
     cy.contains('Sign in')
   })

@@ -11,10 +11,6 @@ import user from '../fixtures/user.json'
 // ***********************************************
 //
 //
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
 // -- This is a child command --
 // Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
 //
@@ -33,9 +29,10 @@ Cypress.Commands.add('loginByCSRF', csrfToken => {
     failOnStatusCode: false,
     form: true,
     body: {
-      email: user.email,
-      password: user.password,
-      _csrf_token: csrfToken
+      _username: user.email,
+      _password: user.password,
+      _csrf_token: csrfToken,
+      _target_path: '/'
     }
   })
 })

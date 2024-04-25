@@ -27,7 +27,7 @@ class AppFixtures extends Fixture
     {
         $user = new User();
         $user->setEmail('test@test.com');
-        $user->setPassword($this->passwordEncoder->encodePassword($user, 'password'));
+        $user->setPassword($this->passwordEncoder->hashPassword($user, 'password'));
         $user->setRoles(['ROLE_USER']);
 
         $manager->persist($user);
@@ -35,7 +35,7 @@ class AppFixtures extends Fixture
         // another user for testing shared notes
         $user = new User();
         $user->setEmail('test1@test.com');
-        $user->setPassword($this->passwordEncoder->encodePassword($user, 'password'));
+        $user->setPassword($this->passwordEncoder->hashPassword($user, 'password'));
         $user->setRoles(['ROLE_USER']);
 
         $manager->persist($user);
@@ -43,7 +43,7 @@ class AppFixtures extends Fixture
         // user for testing unauthorised access to mercure topics
         $user = new User();
         $user->setEmail('unauthorised@test.com');
-        $user->setPassword($this->passwordEncoder->encodePassword($user, 'password'));
+        $user->setPassword($this->passwordEncoder->hashPassword($user, 'password'));
         $user->setRoles(['ROLE_USER']);
 
         $manager->persist($user);

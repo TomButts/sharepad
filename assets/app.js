@@ -4,7 +4,7 @@ import axios from 'axios'
 import Notepad from './components/Notepad.vue'
 import Notelist from './components/Notelist.vue'
 import Share from './components/Share.vue'
-// import { debounce } from 'debounce'
+import { debounce } from 'lodash'
 import moment from 'moment'
 
 const blankNote = {
@@ -71,19 +71,18 @@ new Vue({ // eslint-disable-line
   },
   watch: {
     note: {
-      handler: function (e) {
-        // todo: re add back in debounce and prevent infinite loop
-        // axios
-        //   .post('/note/save', {
-        //     id: this.note.id,
-        //     body: this.note.body
-        //   })
-        //   .then(response => {
-        //     if (this.note.id === 0 && response.data.note !== 0) {
-        //       this.note.id = response.data.note.id
-        //     }
-        //   })
-      },
+      handler: debounce(function (e) {
+        axios
+          .post('/note/save', {
+            id: this.note.id,
+            body: this.note.body
+          })
+          .then(response => {
+            if (this.note.id === 0 && response.data.note !== 0) {
+              this.note.id = response.data.note.id
+            }
+          })
+      }, 700),
       deep: true
     }
   },
