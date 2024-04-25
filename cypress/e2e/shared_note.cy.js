@@ -33,7 +33,7 @@ describe('Note sharing and real time note updates test', () => {
 
   it('Lets user open the share modal', () => {
     cy.get('.share-button').eq(0).click()
-    cy.get('.share__note').should('be.visible')
+    cy.get('.share-note').should('be.visible')
   })
 
   it('Allows you to add a participant', () => {

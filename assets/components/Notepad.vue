@@ -1,8 +1,8 @@
 <template>
-  <div class="notes__preview">
+  <div class="notes-preview">
     <textarea
       v-model="note.body"
-      class="notes__body"
+      class="notes-body"
       placeholder="Write a beautiful note here..."
     ></textarea>
   </div>
