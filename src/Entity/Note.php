@@ -45,17 +45,6 @@ class Note
         $this->participants = new ArrayCollection();
     }
 
-    #[ORM\PrePersist]
-    #[ORM\PreUpdate]
-    public function updatedTimestamps(): void
-    {
-        $this->setUpdatedAt(new DateTimeImmutable());
-
-        if (null === $this->getCreatedAt()) {
-            $this->setCreatedAt(new DateTimeImmutable());
-        }
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -97,9 +86,11 @@ class Note
         return $this->created_at->format('d-m-Y H:i:s');
     }
 
-    public function setCreatedAt(DateTimeImmutable $created_at): self
+    #[ORM\PrePersist]
+    public function setCreatedAt(): self
     {
-        $this->created_at = $created_at;
+        $this->created_at = new DateTimeImmutable();
+        $this->setUpdatedAt();
 
         return $this;
     }
@@ -116,9 +107,10 @@ class Note
         return $this->updated_at->format('d-m-Y H:i:s');
     }
 
-    public function setUpdatedAt(DateTimeImmutable $updated_at): self
+    #[ORM\PreUpdate]
+    public function setUpdatedAt(): self
     {
-        $this->updated_at = $updated_at;
+        $this->updated_at = new DateTimeImmutable();;
 
         return $this;
     }
