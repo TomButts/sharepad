@@ -31,3 +31,5 @@ yarn-error.log
 docker/mysql-data/
 ###< docker data ###
 
+.DS_Store
+
