@@ -2,7 +2,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.2.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/annotations": "^1.13",
@@ -31,6 +31,9 @@
         "symfony/web-profiler-bundle": "7.0.*"
     },
     "config": {
+        "platform": {
+            "php": "8.2.2"
+        },
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "symfony/flex": true,
