@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\User;
+use App\Repository\NoteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,48 +11,33 @@ use DateTimeImmutable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
-/**
- * @ORM\Entity(repositoryClass=NoteRepository::class)
- * @ORM\HasLifecycleCallbacks
- */
+#[ORM\Entity(repositoryClass: NoteRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Note
 {
-    /**
-     * @Groups("note")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[Groups("note")]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private int $id;
 
-    /**
-     * @Groups("note")
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="notes")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
-     */
+    #[Groups("note")]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "notes")]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", nullable: false)]
     private User $owner;
 
-    /**
-     * @Groups("note")
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[Groups("note")]
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $body;
 
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
+    #[ORM\Column(type: "datetime_immutable")]
     private DateTimeImmutable $created_at;
 
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
+    #[ORM\Column(type: "datetime_immutable")]
     private DateTimeImmutable $updated_at;
 
-    /**
-     * @var Collection<User>
-     * @Groups("note")
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="sharedNotes", cascade={"persist", "refresh"})
-     */
+    #[Groups("note")]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: "sharedNotes", cascade: ["persist", "refresh"])]
     private Collection $participants;
 
     public function __construct()
@@ -59,10 +45,8 @@ class Note
         $this->participants = new ArrayCollection();
     }
 
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-    */
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
     public function updatedTimestamps(): void
     {
         $this->setUpdatedAt(new DateTimeImmutable());
@@ -106,10 +90,8 @@ class Note
         return $this->created_at;
     }
 
-    /**
-     * @SerializedName("created_at")
-     * @Groups("note")
-     */
+    #[SerializedName("created_at")]
+    #[Groups("note")]
     public function getCreatedAtFormatted(): string
     {
         return $this->created_at->format('d-m-Y H:i:s');
@@ -127,10 +109,8 @@ class Note
         return $this->updated_at;
     }
 
-    /**
-     * @SerializedName("updated_at")
-     * @Groups("note")
-     */
+    #[SerializedName("updated_at")]
+    #[Groups("note")]
     public function getUpdatedAtFormatted(): ?string
     {
         return $this->updated_at->format('d-m-Y H:i:s');
