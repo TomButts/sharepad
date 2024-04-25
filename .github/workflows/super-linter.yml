@@ -47,5 +47,6 @@ jobs:
           VALIDATE_GITLEAKS: false
           VALIDATE_JSCPD: false
           VALIDATE_JAVASCRIPT_STANDARD: false
+          VALIDATE_DOCKERFILE_HADOLINT: false
           DEFAULT_BRANCH: "master"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

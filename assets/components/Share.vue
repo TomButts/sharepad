@@ -13,7 +13,7 @@
     padding-left: 0;
   }
 
-  .share__note {
+  .share-note {
     padding: 16px;
   }
 
@@ -39,7 +39,7 @@
     <Modal :visible="visible" v-on:close-modal="closeModal()">
       <template v-slot:header>Share Note</template>
       <template v-slot:body>
-        <div class="share__note">
+        <div class="share-note">
           <div class="email-input-container">
             <input id="share-email-input" placeholder="Email address" v-model="email">
             <button id="share-email-button" class="button" type="button" @click="addParticipant">Invite</button>

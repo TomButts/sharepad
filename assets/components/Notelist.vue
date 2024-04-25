@@ -5,27 +5,27 @@
 </style>
 
 <template>
-  <div class="notes__sidebar">
-    <button class="notes__add" type="button" v-on:click="newNote">
+  <div class="notes-sidebar">
+    <button class="notes-add" type="button" v-on:click="newNote">
       Add Note
     </button>
 
-    <div class="notes__list">
+    <div class="notes-list">
       <template v-for="(note, index) in notes">
         <div
-          class="notes__list-item"
+          class="notes-list-item"
           v-bind:key="note.id"
-          :class="{ 'notes__list-item--selected': index === 0 }"
+          :class="{ 'notes-list-item--selected': index === 0 }"
           v-on:click="selectNote(note.id)"
         >
-          <div class="notes__small-title">{{ title(note.body) }}
+          <div class="notes-small-title">{{ title(note.body) }}
             <!-- todo: share icon -->
             <span class="share-icon share-button" @click.stop="handleShare(note.id)">
               +++
             </span>
           </div>
-          <div class="notes__small-body">{{ preview(note.body) }}</div>
-          <div class="notes__small-updated">{{ note.updated_at }}</div>
+          <div class="notes-small-body">{{ preview(note.body) }}</div>
+          <div class="notes-small-updated">{{ note.updated_at }}</div>
         </div>
       </template>
     </div>

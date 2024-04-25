@@ -27,3 +27,9 @@ yarn-error.log
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 
+###> docker data ###
+docker/mysql-data/
+###< docker data ###
+
+.DS_Store
+

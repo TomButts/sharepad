@@ -18,10 +18,10 @@ describe('Notepad tests', () => {
     cy.intercept('GET', '/notes', { notes: [] })
     cy.visit('/')
       .contains('Add Note')
-      .get('.notes__body')
+      .get('.notes-body')
       .should('have.value', '')
 
-    cy.visit('/').get('.notes__body').type('Hello, Friend')
-    cy.get('.notes__body').should('have.value', 'Hello, Friend')
+    cy.visit('/').get('.notes-body').type('Hello, Friend')
+    cy.get('.notes-body').should('have.value', 'Hello, Friend')
   })
 })
