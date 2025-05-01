@@ -7,6 +7,7 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+
 ###> phpunit/phpunit ###
 /phpunit.xml
 .phpunit.result.cache
@@ -20,10 +21,10 @@
 
 ###> docker data ###
 docker/mysql-data/
+mysql-data
 ###< docker data ###
 
 .DS_Store
-
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
